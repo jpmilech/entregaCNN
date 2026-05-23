@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chess Piece Classifier</title>
+</head>
+<body>
+
+  <h2>Classificador de Peças de Xadrez</h2>
+
+<label for="imageInput">Escolha uma imagem de peça:</label>
+<input type="file" id="imageInput" name="imageInput" />
+
+<button onclick="sendImage()">Enviar</button>
+
+  <h3>Resultado:</h3>
+  <pre id="result"></pre>
+
+  <script>
+async function sendImage() {
+  try {
+    const input = document.getElementById("imageInput");
+    const file = input.files[0];
+
+    if (!file) {
+      alert("Selecione uma imagem primeiro!");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    console.log("Enviando imagem...");
+
+    const response = await fetch("http://localhost:3000/infer", {
+      method: "POST",
+      body: formData
+    });
+
+    console.log("Resposta recebida");
+
+    const data = await response.json();
+
+    document.getElementById("result").innerText =
+      JSON.stringify(data, null, 2);
+
+  } catch (err) {
+    console.error("Erro:", err);
+    alert("Erro ao enviar imagem. Veja o console (F12)");
+  }
+}
+</script>
+
+</body>
+</html>
